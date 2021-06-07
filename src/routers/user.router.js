@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import userRoutes from '../routes/user.route';
-import AuthMiddleware from '../middlewares/auth.middleware';
-import UserController from '../controllers/user.controller';
+const { Router } = require('express');
+const userRoutes = require('../routes/user.route');
+const AuthMiddleware = require('../middlewares/auth.middleware');
+const UserController = require('../controllers/user.controller');
 
 const router = Router();
 const authMiddleware = new AuthMiddleware();
@@ -23,4 +23,4 @@ router.get(
 
 router.path = "/user";
 
-export default router;
+module.exports = router;

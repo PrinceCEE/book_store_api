@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   register: "/register",
   login: "/login",
 };

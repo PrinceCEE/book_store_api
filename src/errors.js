@@ -6,7 +6,7 @@ class HttpError extends Error {
   }
 }
 
-export class UnAuthorizedError extends HttpError {
+class UnAuthorizedError extends HttpError {
   constructor(message) {
     if(!message) {
       message = "Unauthorized access";
@@ -16,7 +16,7 @@ export class UnAuthorizedError extends HttpError {
   }
 }
 
-export class BadRequestError extends HttpError {
+class BadRequestError extends HttpError {
   constructor(message) {
     if(!message) {
       message = "Bad request";
@@ -26,7 +26,7 @@ export class BadRequestError extends HttpError {
   }
 }
 
-export class InternalServerError extends HttpError {
+class InternalServerError extends HttpError {
   constructor(message) {
     if(!message) {
       message = "Internal server error";
@@ -36,7 +36,7 @@ export class InternalServerError extends HttpError {
   }
 }
 
-export class NotFoundError extends HttpError {
+class NotFoundError extends HttpError {
   constructor(message) {
     if(!message) {
       message = "Not found";
@@ -44,4 +44,11 @@ export class NotFoundError extends HttpError {
     super(message, 404);
     this.name = NotFoundError.name;
   }
+}
+
+module.exports = {
+  NotFoundError,
+  InternalServerError,
+  BadRequestError,
+  UnAuthorizedError
 }

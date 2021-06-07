@@ -1,16 +1,17 @@
-import { use } from 'passport';
-import { compare } from 'bcrypt';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import userService from './services/user.service';
+const passport = require('passport')
+const { compare } = require('bcrypt');
+const LocalStrategy = require('passport-local')
+const JwtStrategy = require('passport-jwt');
+const userService = require('./services/user.service');
 
 // local strategy
-use(new LocalStrategy(
+exports.localStrategy = () => passport.use(new LocalStrategy.Strategy(
   {
     usernameField: "email",
     passwordField: "password"
   }, async (email, password, done) => {
     const user = await userService.getUserByEmail(email);
+     
     if(!user) {
       return done(null, false, {
         message: "Invalid email"
@@ -29,9 +30,9 @@ use(new LocalStrategy(
 ));
 
 // jwt strategy
-use(new JwtStrategy(
+exports.jwtStrategy = () => passport.use(new JwtStrategy.Strategy(
   {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: JwtStrategy.ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET,
   }, async (payload, done) => {
     let user = await userService.getUserbyId(payload.sub);

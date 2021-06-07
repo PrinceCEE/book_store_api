@@ -1,21 +1,27 @@
-import { object, string } from '@hapi/joi';
+const Joi = require('@hapi/joi');
 
 const minPwdLen = 6;
-export const registerSchema = object({
-  firstname: string().required(),
-  lastname: string().required(),
-  email: string().email().required(),
-  password: string().min(minPwdLen).required(),
+
+exports.registerSchema = Joi.object({
+  firstname: Joi.string().required(),
+  lastname: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(minPwdLen).required(),
 });
 
-export const loginSchema = object({
-  email: string().email().required(),
-  password: string().min(minPwdLen).required()
+exports.loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(minPwdLen).required()
 });
 
-export const createBookSchema = object({
-  name: string().required(),
-  author: string().required(),
-  description: string()
+exports.createBookSchema = Joi.object({
+  name: Joi.string().required(),
+  author: Joi.string().required(),
+  description: Joi.string()
 });
-export const updateBookSchema = createBookSchema;
+
+exports.updateBookSchema = Joi.object({
+  name: Joi.string().required(),
+  author: Joi.string().required(),
+  description: Joi.string()
+});

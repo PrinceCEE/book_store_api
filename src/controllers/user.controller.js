@@ -1,4 +1,4 @@
-export default class UserController {
+class UserController {
   constructor(userService, bookService) {
     this._userService = userService;
     this._bookService = bookService;
@@ -21,3 +21,5 @@ export default class UserController {
     });
   }
 }
+
+module.exports = UserController;

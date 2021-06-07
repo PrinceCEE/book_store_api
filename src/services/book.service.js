@@ -1,4 +1,4 @@
-import userModel from '../models/user.model';
+const bookModel = require('../models/book.model');
 
 // using arrow functions for the binding of `this`
 class BookService {
@@ -29,10 +29,16 @@ class BookService {
     }
   )
 
+  alreadyRated = async (bookId, userId) => {
+    const { bookRating } = await this._model.findOne({ _id: bookId });
+    const index = bookRating.users.findIndex(val => val.userId.toString() === userId);
+ 
+    return index !== -1;
+  }
+
   addRating = async (bookId, rating, userId) => {
     const book = await this._model.findOne({ _id: bookId });
     const { bookRating } = book;
-
     bookRating.users.push({
       userId: userId,
       rating: Number(rating)
@@ -41,9 +47,9 @@ class BookService {
     // saving the cumulative ratings
     // so as to prevent long running looping
     bookRating.cumulative += parseInt(rating);
-    bookRating.totalRating = bookRating.cumulative / bookRating.length;
+    bookRating.totalRating = bookRating.cumulative / bookRating.users.length;
     return book.save();
   }
 }
 
-export default new BookService(userModel);
+module.exports = new BookService(bookModel);

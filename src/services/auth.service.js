@@ -1,7 +1,13 @@
-import jsonwebtoken from 'jsonwebtoken';
+const jsonwebtoken = require('jsonwebtoken');
 
 class AuthService {
-  getToken = payload => jsonwebtoken.sign(payload)
+  getToken = payload => jsonwebtoken.sign(
+    payload,
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7d"
+    }
+  )
 }
 
-export default new AuthService();
+module.exports = new AuthService();

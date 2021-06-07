@@ -1,20 +1,25 @@
-import express from 'express';
-import { initialize } from 'passport';
-import { json, urlencoded } from 'body-parser';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import Logger from 'morgan';
-import Helmet from 'helmet';
-import userRouter from './routers/user.router';
-import bookRouter from './routers/book.router';
-import authRouter from './routers/auth.router';
+const express = require('express');
+const passport = require('passport');
+const { json, urlencoded } = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const Logger = require('morgan');
+const Helmet = require('helmet');
+const userRouter = require('./routers/user.router');
+const bookRouter = require('./routers/book.router');
+const authRouter = require('./routers/auth.router');
+const { localStrategy, jwtStrategy } = require('./strategies');
 
 const app = express();
+
+// initialise strategies
+localStrategy();
+jwtStrategy();
 
 // initialise the route-wide middlewares
 app.use(Helmet());
 app.use(Logger("dev"));
-app.use(initialize());
+app.use(passport.initialize());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -41,7 +46,7 @@ app.use(bookRouter.path, bookRouter);
 
 // catch all Http errors
 app.use((err, req, res, next) => {
-  res.status(err.statusCode).json({
+  res.status(err.statusCode || 500).json({
     success: false,
     data: err.message,
   });
@@ -49,10 +54,10 @@ app.use((err, req, res, next) => {
 
 // catch all 404 errors
 app.use((req, res, next) => {
-  res.status(err.statusCode).json({
+  res.status(404).json({
     success: false,
-    data: err.message,
+    data: "Not found",
   });
 });
 
-export default app;
+module.exports = app;

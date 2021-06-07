@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   all: "/all_books",
   viewBook: "/:bookId",
   createBook: "/create_book",

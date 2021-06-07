@@ -1,8 +1,8 @@
-import { hash, genSalt } from 'bcrypt';
+const { hash, genSalt } = require('bcrypt');
 
-export default {
+module.exports = {
   hashPassword: async function(pwd) {
-    const salt = genSalt(10);
+    const salt = await genSalt(10);
     return hash(pwd, salt);
   },
 };

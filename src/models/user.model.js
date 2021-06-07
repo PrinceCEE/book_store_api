@@ -1,9 +1,9 @@
-import { model, Schema } from 'mongoose';
-import moment from 'moment';
+const { model, Schema } = require('mongoose');
+const moment = require('moment');
 
 const UserSchema = new Schema({
   firstname: { type: String, required: true },
-  lastame: { type: String, required: true },
+  lastname: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, minLength: 6 },
   books: [{
@@ -21,4 +21,4 @@ UserSchema.virtual("timeCreated").get(function() {
   return `${moment(this.createdAt).format("MMM Do YYYY")}`;
 });
 
-export default model("User", UserSchema);
+module.exports = model("User", UserSchema);

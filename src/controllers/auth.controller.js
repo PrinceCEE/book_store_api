@@ -1,4 +1,6 @@
-export default class AuthController {
+const { InternalServerError } = require('../errors');
+
+class AuthController {
   constructor(authService, userService) {
     this._authService = authService;
     this._userService = userService;
@@ -21,7 +23,12 @@ export default class AuthController {
   register = async (req, res, next) => {
     const data = req.body;
     const password = data.password;
-    const user = await this._userService.createNewUser(data);
+    let user;
+    try {
+      user = await this._userService.createNewUser(data);
+    } catch(err) {
+      return next(new InternalServerError(err.message));
+    }
 
     // redirect to the login for sign in
     req.originalUrl = '/auth/login';
@@ -34,3 +41,5 @@ export default class AuthController {
     req.app.handle(req, res);
   }
 }
+
+module.exports = AuthController;

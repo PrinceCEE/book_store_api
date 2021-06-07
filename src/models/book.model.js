@@ -1,5 +1,5 @@
-import { model, Schema } from 'mongoose';
-import moment from 'moment';
+const { model, Schema } = require('mongoose');
+const moment = require('moment');
 
 const BookSchema = new Schema({
   name: { type: String, required: true },
@@ -31,4 +31,4 @@ BookSchema.virtual("timeCreated").get(function() {
   return `${moment(this.createdAt).format("MMM Do YYYY")}`;
 });
 
-export default model("Book", BookSchema);
+module.exports = model("Book", BookSchema);

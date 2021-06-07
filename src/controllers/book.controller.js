@@ -1,7 +1,7 @@
-import isNumber from 'is-number';
-import { InternalServerError, BadRequestError } from "../errors";
+const isNumber = require('is-number');
+const { InternalServerError, BadRequestError } = require("../errors.js");
 
-export default class BookController {
+class BookController {
   constructor(userService, bookService) {
     this._userService = userService;
     this._bookService = bookService;
@@ -24,14 +24,16 @@ export default class BookController {
     });
   }
 
-  createBook = (req, res, next) => {
+  createBook = async (req, res, next) => {
     const user = req.user;
-    const data = req.data;
+    const data = req.body;
     const book = await this._bookService.createNewBook(data, user.id);
     if(!book) {
       return next(new InternalServerError("Error creating book, try again"));
     }
     
+    // save book to the user's book list
+    await this._userService.addBookToUser(user, book.id);
     res.json({
       success: true,
       data: book
@@ -40,7 +42,11 @@ export default class BookController {
 
   deleteBook = async (req, res, next) => {
     const { bookId } = req.params;
-    await this._bookService.deleteBook(bookId);
+    const user = req.user;
+    const book = await this._bookService.deleteBook(bookId);
+
+    // remove book from the user's book list
+    await this._userService.removeBookFromUser(user, book.id);
     res.json({
       success: true,
       data: "Book deleted successfully"
@@ -63,14 +69,23 @@ export default class BookController {
     const { rating } = req.query;
 
     if(!isNumber(rating)) {
-      return next(new BadRequestError("Invalid rating"));
+      return next(new BadRequestError("Invalid rating value"));
     }
 
-    const book = await this._bookService.addRating(
-      bookId,
-      rating,
-      req.user.id,
-    );
+    if(Number(rating) > 5 || Number(rating) < 0) {
+      return next(new BadRequestError("Invalid rating value, value should be between 0 and 5"));
+    }
+
+    let book;
+    try {
+      book = await this._bookService.addRating(
+        bookId,
+        rating,
+        req.user.id,
+      );
+    } catch(err) {
+      return next(new BadRequestError(err.message));
+    }
 
     res.json({
       success: true,
@@ -78,3 +93,5 @@ export default class BookController {
     });
   }
 }
+
+module.exports = BookController;

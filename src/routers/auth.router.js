@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import authoutes from '../routes/auth.route';
-import AuthMiddleware from '../middlewares/auth.middleware';
-import AuthController from '../controllers/auth.controller';
-import userService from '../services/user.service';
-import authService from '../services/auth.service';
+const { Router } = require('express');
+const authoutes = require('../routes/auth.route');
+const AuthMiddleware = require('../middlewares/auth.middleware');
+const AuthController = require('../controllers/auth.controller');
+const userService = require('../services/user.service');
+const authService = require('../services/auth.service');
 
 const router = Router();
 const authMiddelware = new AuthMiddleware(
@@ -29,4 +29,4 @@ router.post(
 
 router.path = "/auth";
 
-export default router;
+module.exports = router;

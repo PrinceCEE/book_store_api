@@ -2,11 +2,11 @@
   "name": "getdev_project",
   "version": "1.0.0",
   "description": "An API bookstore for GetDev project",
-  "type": "module",
-  "main": "index.js",
+  "type": "commonjs",
+  "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "node index.js"
+    "start": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",

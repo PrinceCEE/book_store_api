@@ -1,13 +1,13 @@
-import { BadRequestError, UnAuthorizedError } from '../errors';
-import { createBookSchema, updateBookSchema } from '../validators';
+const { BadRequestError, UnAuthorizedError } = require('../errors.js');
+const { createBookSchema, updateBookSchema } = require('../validators/index.js');
 
-export default class BookMiddleware {
+class BookMiddleware {
   constructor(userService, bookService) {
     this._userService = userService;
     this._bookService = bookService;
   }
 
-  viewBook = async (req, res, next) => {
+  bookExists = async (req, res, next) => {
     const { bookId } = req.params;
     const book = await this._bookService.getBook(bookId);
 
@@ -30,10 +30,9 @@ export default class BookMiddleware {
   validateAccess = (req, res, next) => {
     const { bookId } = req.params;
     const user = req.user;
-
     const isFound = user.books.find(val => val.toString() === bookId);
     if(!isFound) {
-      return next(new UnAuthorizedError("You are not authorised to perferm this request"));
+      return next(new UnAuthorizedError("You are not authorised to perform this request"));
     }
     next();
   }
@@ -45,4 +44,17 @@ export default class BookMiddleware {
     }
     next();
   }
+
+  verifyAlreadyRated = async (req, res, next) => {
+    const { bookId } = req.params;
+    const user = req.user;
+    const alreadyRated = await this._bookService.alreadyRated(bookId, user.id);
+  
+    if(alreadyRated) {
+      return next(new UnAuthorizedError("You have already rated this book"));
+    }
+    next();
+  }
 }
+
+module.exports = BookMiddleware;
