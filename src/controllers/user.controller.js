@@ -4,7 +4,20 @@ export default class UserController {
     this._bookService = bookService;
   }
 
-  userPage = (req, res, next) => {}
+  userPage = (req, res, next) => {
+    res.json({
+      success: true,
+      data: req.user,
+    });
+  }
 
-  viewMyBooks = (req, res, next) => {}
+  viewMyBooks = async (req, res, next) => {
+    const user = req.user;
+    const books = await this._bookService.getUserBooks(user.id);
+
+    res.json({
+      success: true,
+      data: books
+    });
+  }
 }

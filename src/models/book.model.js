@@ -10,6 +10,16 @@ const BookSchema = new Schema({
     required: true
   },
   description: String,
+  bookRating: {
+    _id: false,
+    users: [{
+      _id: false,
+      userId: { type: Schema.Types.ObjectId, ref: "User" },
+      rating: { type: Number, max: 5, min: 0 },
+    }],
+    totalRating: { type: Number, default: 0 },
+    cumulative: { type: Number, default: 0 },
+  }
 }, {
   timestamps: true,
   toJSON: {

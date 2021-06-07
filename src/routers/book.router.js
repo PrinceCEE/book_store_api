@@ -26,6 +26,7 @@ router.get(
 router.post(
   bookRoutes.createBook,
   authMiddleware.verifyUser,
+  bookMiddleware.createBook,
   bookController.createBook,
 );
 
@@ -42,6 +43,7 @@ router.post(
   bookRoutes.updateBook,
   authMiddleware.verifyUser,
   bookMiddleware.validateAccess,
+  bookMiddleware.updateBook,
   bookController.updateBook,
 );
 

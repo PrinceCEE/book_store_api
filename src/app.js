@@ -41,12 +41,18 @@ app.use(bookRouter.path, bookRouter);
 
 // catch all Http errors
 app.use((err, req, res, next) => {
-
+  res.status(err.statusCode).json({
+    success: false,
+    data: err.message,
+  });
 });
 
 // catch all 404 errors
 app.use((req, res, next) => {
-
+  res.status(err.statusCode).json({
+    success: false,
+    data: err.message,
+  });
 });
 
 export default app;
