@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import app from './app';
 
 // load the env configs
-dotenv.config({ path: './.development.env' });
+dotenv.config({ path: './.env' });
 
 const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL;
