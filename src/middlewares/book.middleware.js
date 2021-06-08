@@ -1,4 +1,8 @@
-const { BadRequestError, UnAuthorizedError } = require('../errors.js');
+const {
+  BadRequestError,
+  UnAuthorizedError,
+  NotFoundError,
+} = require('../errors.js');
 const { createBookSchema, updateBookSchema } = require('../validators/index.js');
 
 class BookMiddleware {
@@ -12,7 +16,7 @@ class BookMiddleware {
     const book = await this._bookService.getBook(bookId);
 
     if(!book) {
-      return next(new BadRequestError("Book doesn't exist"));
+      return next(new NotFoundError("Book doesn't exist"));
     }
 
     next();
