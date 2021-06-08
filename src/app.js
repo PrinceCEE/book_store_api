@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const Logger = require('morgan');
 const Helmet = require('helmet');
+const swaggerUI = require('swagger-ui-express');
+const documentation = require('../swagger.json');
 const userRouter = require('./routers/user.router');
 const bookRouter = require('./routers/book.router');
 const authRouter = require('./routers/auth.router');
@@ -43,6 +45,13 @@ app.use(cors({
 app.use(authRouter.path, authRouter);
 app.use(userRouter.path, userRouter);
 app.use(bookRouter.path, bookRouter);
+
+// add the swagger api docs
+app.use(
+  "/api",
+  swaggerUI.serve,
+  swaggerUI.setup(documentation)
+);
 
 // catch all Http errors
 app.use((err, req, res, next) => {

@@ -1,0 +1,397 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple API documentation for book store API built for GetDev project",
+    "version": "1.0.0",
+    "title": "GetDev Book API",
+    "contact": {
+      "email": "princecee15@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "getdev-bookstore-api.herokuapp.com",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authenticates the user through local and Jwt mechanism"
+    },
+    {
+      "name": "User",
+      "description": "Get user details and books added by the user"
+    },
+    {
+      "name": "Books",
+      "description": "Create and manage the books"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Create a new account",
+        "description": "For creating a new account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Body of the registration endpoint",
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful sign in"
+          },
+          "401": {
+            "description": "This email already exists, please log in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Log in",
+        "description": "User login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Body of the login endpoint",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful sign in"
+          },
+          "400": {
+            "description": "Invalid login details"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Returns a user profile",
+        "description": "Retrieves the user's profile details",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the user details"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/books": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Returns the books a user has uploaded",
+        "description": "Retrieves all the books the user has added",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all the user's books"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/books/all_books": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "All books",
+        "description": "Retrieves all the books",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All books in the database"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/books/{bookId}": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Gets book",
+        "description": "Retrieves a particular book",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to be retrieved",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieves the book"
+          },
+          "404": {
+            "description": "book doesn't exist"
+          }
+        }
+      }
+    },
+    "/books/create_book": {
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Create a new book",
+        "description": "Registered users can create/add a new book",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Body of the new book endpoint",
+            "schema": {
+              "$ref": "#/definitions/CreateBook"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Creates and returns the book"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/books/{bookId}/delete_book": {
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Delete a book",
+        "description": "Can only be deleted by the user that added the book",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Book doesn't exist"
+          }
+        }
+      }
+    },
+    "/books/{bookId}/update_book": {
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Updates a book",
+        "description": "Can only be updated by the user that added the book",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Properties of the Book to update",
+            "schema": {
+              "$ref": "#/definitions/CreateBook"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns updated book"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Book doesn't exist"
+          }
+        }
+      }
+    },
+    "/books/{bookId}/add_rating": {
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Rates a book only once",
+        "description": "Can be rated by anyone but by only registered users",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to be rated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book that was rated"
+          },
+          "401": {
+            "description": "You have already rated this book"
+          },
+          "404": {
+            "description": "Book doesn't exist"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Register": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateBook": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
